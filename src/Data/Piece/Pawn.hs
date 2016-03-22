@@ -18,8 +18,8 @@ import Control.Applicative ((<$>),(<*>))
 import Data.Bits
 import Data.Word
 
--- NOTE: White should use the regular northSpan and
--- southSpan, however black 
+-- TODO: Names get slightly unweildy as we progress,
+-- try to fix that.
 
 ----------------
 -- PAWN FILLS --
@@ -30,8 +30,7 @@ northFill board =
     let iter0 = board
         iter1 = iter0 .|. shiftL iter0 8
         iter2 = iter1 .|. shiftL iter1 16
-        iter3 = iter2 .|. shiftL iter2 32
-    in  iter3
+    in          iter2 .|. shiftL iter2 32
 
 -- | Fills all spaces south of the tagged positions
 southFill :: Word64 -> Word64
@@ -39,8 +38,7 @@ southFill board =
     let iter0 = board
         iter1 = iter0 .|. shiftR iter0 8
         iter2 = iter1 .|. shiftR iter1 16
-        iter3 = iter2 .|. shiftR iter2 32
-    in  iter3
+    in          iter2 .|. shiftR iter2 32
 
 -- | Union of north and south fills
 fileFill :: Word64 -> Word64
@@ -74,11 +72,17 @@ southStopSquares = south
 -- COLOUR AGNOSTIC ATTACK SPANS --
 ----------------------------------
 
+-- | East-side pawn attack file
 eastAttackFileFill :: Word64 -> Word64
 eastAttackFileFill = east . fileFill
 
+-- | West-side pawn attack file
 westAttackFileFill :: Word64 -> Word64
 westAttackFileFill = west . fileFill
+
+fullAttackFileFill :: Word64 -> Word64
+fullAttackFileFill = (.|.) <$> westAttackFileFill
+                           <*> eastAttackFileFill
 
 ------------------------
 -- WHITE ATTACK SPANS --
@@ -90,11 +94,19 @@ eastAttackNorthSpanW = east . northSpan
 westAttackNorthSpanW :: Word64 -> Word64
 westAttackNorthSpanW = west . northSpan
 
-eastAttackRearSpanW :: Word64 -> Word64
-eastAttackRearSpanW = east . southFill
+fullAttackNorthSpanW :: Word64 -> Word64
+fullAttackNorthSpanW = (.|.) <$> westAttackNorthSpanW
+                             <*> eastAttackNorthSpanW
 
-westAttackRearSpanW :: Word64 -> Word64
-westAttackRearSpanW = west . southFill
+eastAttackSouthSpanW :: Word64 -> Word64
+eastAttackSouthSpanW = east . southFill
+
+westAttackSouthSpanW :: Word64 -> Word64
+westAttackSouthSpanW = west . southFill
+
+fullAttackSouthSpanW :: Word64 -> Word64
+fullAttackSouthSpanW = (.|.) <$> westAttackSouthSpanW
+                             <*> eastAttackSouthSpanW
 
 ------------------------
 -- BLACK ATTACK SPANS --
@@ -106,9 +118,17 @@ eastAttackNorthSpanB = east . northFill
 westAttackNorthSpanB :: Word64 -> Word64
 westAttackNorthSpanB = west . northFill
 
-eastAttackRearSpanB :: Word64 -> Word64
-eastAttackRearSpanB = east . southSpan
+fullAttackNorthSpanB :: Word64 -> Word64
+fullAttackNorthSpanB = (.|.) <$> westAttackNorthSpanB
+                             <*> eastAttackNorthSpanB
 
-westAttackRearSpanB :: Word64 -> Word64
-westAttackRearSpanB = west . southSpan
+eastAttackSouthSpanB :: Word64 -> Word64
+eastAttackSouthSpanB = east . southSpan
+
+westAttackSouthSpanB :: Word64 -> Word64
+westAttackSouthSpanB = west . southSpan
+
+fullAttackSouthSpanB :: Word64 -> Word64
+fullAttackSouthSpanB = (.|.) <$> westAttackSouthSpanB
+                             <*> eastAttackSouthSpanB
 

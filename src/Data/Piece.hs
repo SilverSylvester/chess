@@ -7,6 +7,7 @@
 -- Stability  : experimental
 -- Portability: non-portable
 -- Description: Module responsible for generic piece operations
+--
 --------------------------------------------------------------------
 
 module Data.Piece where
@@ -25,25 +26,25 @@ south = flip shiftR 8
 
 -- | Moves each component one position east
 east :: Word64 -> Word64
-east b = Board.notFileA .&. shiftR b 1
+east b = Board.notFileA .&. shiftL b 1
 
 -- | Moves each component one position west
 west :: Word64 -> Word64
-west b = Board.notFileH .&. shiftL b 1
+west b = Board.notFileH .&. shiftR b 1
 
 -- | Moves each component one position north-east
 northEast :: Word64 -> Word64
-northEast b = Board.notFileA .&. shiftR b 9
+northEast b = Board.notFileA .&. shiftL b 9
 
 -- | Moves each component one position south-east
 southEast :: Word64 -> Word64
-southEast b = Board.notFileA .&. shiftL b 7
+southEast b = Board.notFileA .&. shiftR b 7
 
 -- | Moves each component one position north-west
 northWest :: Word64 -> Word64
-northWest b = Board.notFileH .&. shiftR b 7
+northWest b = Board.notFileH .&. shiftL b 7
 
 -- | Moves each component one position south-west
 southWest :: Word64 -> Word64
-southWest b = Board.notFileH .&. shiftL b 9
+southWest b = Board.notFileH .&. shiftR b 9
 

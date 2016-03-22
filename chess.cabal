@@ -19,6 +19,7 @@ library
                      , Data.Piece
                      , Data.Piece.Pawn
                      , Data.Piece.Knight
+                     , Data.Piece.King
   build-depends:       base >= 4.7 && < 5
                      , digits
   default-language:    Haskell2010

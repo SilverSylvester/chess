@@ -15,6 +15,7 @@ import Data.Board
 import Data.Piece
 import Data.Piece.Pawn
 import Data.Piece.Knight
+import Data.Piece.King
 
 main = return ()
 
