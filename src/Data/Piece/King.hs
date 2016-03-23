@@ -9,14 +9,17 @@
 --
 --------------------------------------------------------------------
 
-module Data.Piece.King where
+module Data.Piece.King ( kingAttacks ) where
 
 import qualified Data.Board as Board
-import Data.Piece
+import Data.Piece ( north
+                  , south
+                  , east
+                  , west )
 import Data.Bits
 import Data.Word
 
--- | Shows king attack squares
+-- | Generates unobstructed attack squares for kings
 kingAttacks :: Word64 -> Word64
 kingAttacks b =
     let attacks = east b .|. west b

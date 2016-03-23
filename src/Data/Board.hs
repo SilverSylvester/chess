@@ -6,7 +6,7 @@
 -- Maintainer : reynolds.conor@gmail.com
 -- Stability  : experimental
 -- Portability: non-portable
--- Description: Module responsible for defining the chess board and
+--              Module responsible for defining the chess board and
 --              the most common operations associated with it.
 --
 --------------------------------------------------------------------
@@ -49,6 +49,9 @@ module Data.Board (
                   , verticalFlip
                   , horizontalFlip
 
+                  , isFull
+                  , isEmpty
+                  
                   -- Mainly to prevent wrapping when inconvenient
                   , notFileA
                   , notFileH
@@ -71,6 +74,7 @@ import Data.Word
 
 -- | See Bitboards:
 --   https://chessprogramming.wikispaces.com/Bitboards
+--   
 --   _111, as a 'position', is not occupied.
 data Board = Board
     {-# UNPACK #-} !Word64
@@ -142,6 +146,24 @@ horizontalFlip b =
         y  = shiftR x 2 .&. k2 .|. shiftL (x .&. k2) 2
     in       shiftR y 4 .&. k4 .|. shiftL (y .&. k4) 4
 
+--------------------
+-- BOOLEAN CHECKS --
+--------------------
+
+-- | Checks if a particular board tag is empty
+--   (i.e. no square is tagged)
+isEmpty :: Word64 -> Bool
+isEmpty = (== 0)
+
+-- | Checks if a particular board tab is full
+--   (i.e. all squares are tagged)
+isFull :: Word64 -> Bool
+isFull = (== complement 0)
+
+----------
+-- MISC --
+----------
+
 -- | Bitmasks for edge files. Prevents wrapping.
 --   No real need for other file combinators (yet).
 notFileA, notFileH :: Word64
@@ -164,7 +186,7 @@ startingBoard = (\(a:b:c:d:_) -> Board a b c d) $ map (unDigits 2) $ transpose
 showBoard :: Word64 -> IO ()
 showBoard = putStr . unlines . map (unwords . reverse . map show) . group8 . pad . digits 2
 
--- | Handy in many cases (probably belongs in a Utils library).
+-- | Handy in many cases, but probably belongs in a Utils library.
 group8 :: [a] -> [[a]]
 group8 [] = []
 group8 xs = take 8 xs : group8 (drop 8 xs)
@@ -178,9 +200,9 @@ pad ds = replicate (64 - length ds) 0 ++ ds
 --   debugging. Maybe try to show the coordinates on the left and
 --   bottom.
 printBoard :: Board -> String
-printBoard = ("-----------------------------------------\n"++)
+printBoard = ("+----+----+----+----+----+----+----+----+\n"++)
            . intercalate "\n"
-           . map ((++ "|\n-----------------------------------------")
+           . map ((++ "|\n+----+----+----+----+----+----+----+----+")
                     . concatMap match . reverse)
            . group8
            . transpose

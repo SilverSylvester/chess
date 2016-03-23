@@ -9,36 +9,42 @@
 --
 --------------------------------------------------------------------
 
-module Data.Piece.Pawn where
-
-import qualified Data.Board as Board
-import Data.Piece
+module Data.Piece.Pawn (
+                       -- Do we really need *all* these functions?
+                         fileFill
+                       , northSpan
+                       , southSpan
+                       , interSpan
+                       , northStopSquares
+                       , southStopSquares
+                       , eastAttackFileFill
+                       , westAttackFileFill
+                       , fullAttackFileFill
+                       
+                       -- ... especially these functions?
+                       , eastAttackNorthSpanW
+                       , westAttackNorthSpanW
+                       , fullAttackNorthSpanW
+                       , eastAttackSouthSpanW
+                       , westAttackSouthSpanW
+                       , fullAttackSouthSpanW
+                       ) where
 
 import Control.Applicative ((<$>),(<*>))
-import Data.Bits
-import Data.Word
 
--- TODO: Names get slightly unweildy as we progress,
--- try to fix that.
+import Data.Bits
+import qualified Data.Board as Board
+import Data.Piece ( north
+                  , south
+                  , east
+                  , west
+                  , northFill
+                  , southFill )
+import Data.Word
 
 ----------------
 -- PAWN FILLS --
 ----------------
-
-northFill :: Word64 -> Word64
-northFill board =
-    let iter0 = board
-        iter1 = iter0 .|. shiftL iter0 8
-        iter2 = iter1 .|. shiftL iter1 16
-    in          iter2 .|. shiftL iter2 32
-
--- | Fills all spaces south of the tagged positions
-southFill :: Word64 -> Word64
-southFill board =
-    let iter0 = board
-        iter1 = iter0 .|. shiftR iter0 8
-        iter2 = iter1 .|. shiftR iter1 16
-    in          iter2 .|. shiftR iter2 32
 
 -- | Union of north and south fills
 fileFill :: Word64 -> Word64

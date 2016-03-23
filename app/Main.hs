@@ -11,11 +11,21 @@
 
 module Main where
 
-import Data.Board
-import Data.Piece
-import Data.Piece.Pawn
-import Data.Piece.Knight
-import Data.Piece.King
+import Control.Monad
 
-main = return ()
+import Data.Board        as Board
+import Data.Board.Eval   as Eval
+import Data.Piece        as Piece
+import Data.Piece.Pawn   as Pawn
+import Data.Piece.Knight as Knight
+import Data.Piece.Bishop as Bishop
+import Data.Piece.Rook   as Rook
+import Data.Piece.Queen  as Queen
+import Data.Piece.King   as King
+
+-- | TODO: Make some sort of CLI interactive
+--   chess board.
+main = forever $ do
+    print startingBoard
+    getChar
 

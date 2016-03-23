@@ -9,16 +9,20 @@
 --
 --------------------------------------------------------------------
 
-module Data.Piece.Knight where
+module Data.Piece.Knight ( knightAttacks
+                         , knightFill
+                         ) where
 
 import Control.Applicative ((<$>),(<*>))
 import Data.Bits
 import qualified Data.Board as Board
-import Data.Piece
+import Data.Piece ( north
+                  , south
+                  , east
+                  , west )
 import Data.Word
 
--- | Generates the squares possible for a knight to
---   attack. Probably a little inefficient.
+-- | Generates unobstructed attack squares for knights
 knightAttacks :: Word64 -> Word64
 knightAttacks b = foldl (.|.) 0 $ map ($ b)
     [ north . north . east
