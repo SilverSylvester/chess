@@ -210,7 +210,7 @@ printBoard = ("+----+----+----+----+----+----+----+----+\n"++)
            . (\(Board a b c d) -> [a,b,c,d])
     -- Note that the colours here, in a Unicode sense, are 'wrong'. White looks
     -- like black and black looks like white, so I've just switched them. The
-    -- actual colour of each piece is indicated on the left.
+    -- actual colour of each piece is indicated on the right.
     where match [_,0,0,0] = "|    "
           match [0,1,0,1] = "| ♙  " -- White pawn
           match [1,1,0,1] = "| ♟  " -- Black pawn
